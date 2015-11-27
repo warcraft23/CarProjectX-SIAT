@@ -1,15 +1,19 @@
-﻿生成启动时间为 2015/11/23 14:58:03。
-     1>项目“D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\CarAuth\CarAuth.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2015/11/27 17:25:49。
+     1>项目“D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\CarAuth\CarAuth.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>ClCompile:
-         E:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"D:\workspace\Tools\OpenSSL-Win32\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt car_auth.cpp main.cpp
          main.cpp
-     1>d:\workspace\carprojectx\smart_car_proj\car_auth\carauth\carauth\message.h(22): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+     1>d:\workspace\carprojectx\smart_car_proj\car_auth\carauth\carauth\message.h(26): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+         car_auth.cpp
+     1>d:\workspace\carprojectx\smart_car_proj\car_auth\carauth\carauth\message.h(26): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+         正在生成代码...
+     1>d:\workspace\carprojectx\smart_car_proj\car_auth\carauth\carauth\car_auth.cpp(280): warning C4172: 返回局部变量或临时变量的地址: signature
        Link:
-         E:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.lib" /MACHINE:X86 Debug\car_auth.obj
+         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\workspace\Tools\OpenSSL-Win32\lib\VC" libeay32MTd.lib ssleay32MTd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.lib" /MACHINE:X86 Debug\car_auth.obj
          Debug\main.obj
          CarAuth.vcxproj -> D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\Debug\CarAuth.exe
-     1>已完成生成项目“D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\CarAuth\CarAuth.vcxproj”(Build 个目标)的操作。
+     1>已完成生成项目“D:\workspace\CarProjectX\smart_car_proj\car_auth\CarAuth\CarAuth\CarAuth.vcxproj”(Rebuild 个目标)的操作。
 
 已成功生成。
 
-已用时间 00:00:00.79
+已用时间 00:00:02.27
