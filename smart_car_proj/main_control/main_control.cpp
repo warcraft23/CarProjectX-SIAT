@@ -1,5 +1,6 @@
 //#include "stdafx.h"
 #include "Aria.h"
+#include "car_auth.h"
 
 #define ROBOT_NUM	10
 #define ARG_GRP_LEN	4
@@ -77,7 +78,7 @@ Robot_Obj::~Robot_Obj()
 		delete mySonar;
 	}
 }
-
+/*
 enum { TYPE_GENERIC = 1, TYPE_SPECIAL = 2, TYPE_DIRECTION = 4,
 	TYPE_ECOMPASS = 8};
 
@@ -108,7 +109,7 @@ struct Msg_Item {
 };
 
 #define MSG_LEN (sizeof(struct Msg_Item))
-
+*/
 class Counter {
 public:
 	int index;
@@ -228,10 +229,18 @@ public:
 	ArMutex myMutex;
 	ArSocket *myServerSock;
 	Robot_Msg *myRobotMsg;
+	CarAuth myCarAuth=CarAuth(1);
 
 	void *runThread(void *arg);
 	void sendMsg(struct Msg_Item *msg_item);
+
+	//MsgConsumeThread();
 };
+/*
+MsgConsumeThread::MsgConsumeThread() {
+	myCarAuth = CarAuth(1);
+}
+*/
 
 void MsgConsumeThread::sendMsg(struct Msg_Item *msg_item)
 {
@@ -271,7 +280,8 @@ void *MsgConsumeThread::runThread(void * arg)
 			case 'p':
 				/* encrypt logic here */
 				/* to do */
-				
+				myCarAuth.packPkt(msg_item);
+
 				sendMsg(msg_item);				
 				break;
 			default:

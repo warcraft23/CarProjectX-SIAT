@@ -1,7 +1,11 @@
 //#include "stdafx.h"
 #include "Aria.h"
+#include "car_auth.h"
 
 #define OUTDOOR 1
+/************************************************************************/
+/* UNTEST_NET 1为室外有GPS，0为室内无GPS                                     */
+/************************************************************************/
 #define UNTEST_NET 1
 #define ENABLE_ECOM 0
 
@@ -12,6 +16,7 @@
 #define SPORT 9999
 
 int slaveGpsTest = false;
+CarAuth car_auth = CarAuth(1);
 
 class Robot_Obj {
 public:
@@ -85,7 +90,7 @@ Robot_Obj::~Robot_Obj()
 		delete mySonar;
 	}
 }
-
+/*
 enum { TYPE_GENERIC = 1, TYPE_SPECIAL = 2, TYPE_DIRECTION = 4,
 	TYPE_ECOMPASS = 8};
 
@@ -116,7 +121,7 @@ struct Msg_Item {
 };
 
 #define MSG_LEN (sizeof(struct Msg_Item))
-
+*/
 class Robot_Msg {
 public:
 	struct Msg_Item myMsgQueue[MSG_QUEUE_LEN];
@@ -628,7 +633,7 @@ public:
 	int condition_wait_flag;
 
 	SendSlaveMsgThread();
-	void setRobotMsg(Robot_Msg *robot_msg);	
+	//void setRobotMsg(Robot_Msg *robot_msg);	
 	void msgEnqueue(struct Msg_Item *msg_item);
 	void parseAndForwardMsg(struct Msg_Item *msg_item);	
 	void *runThread(void *arg);	
@@ -672,7 +677,12 @@ void SendSlaveMsgThread::parseAndForwardMsg(struct Msg_Item *msg_item)
 		}
 	}
 #endif
-
+	/************************************************************************/
+	/* 打包数据包，填充数据                                                                     */
+	/************************************************************************/
+#if CARAUTH
+	car_auth.packPkt(msg_item);
+#endif
 	for (i = 0; i < mySlaveNr; i++) {
 		if(mySlaveSock[i].write((void *)msg_item, MSG_LEN) == MSG_LEN)
 			ArLog::log(ArLog::Verbose, 
@@ -852,7 +862,8 @@ void RcvMasterMsgThread::parseMsg(struct Msg_Item *msg_item)
 			break;
 		#endif
 		case 'p':
-			myRobot_Obj->myRobot.comInt(ArCommands::ENABLE, msg_item->val);
+			//myRobot_Obj->myRobot.comInt(ArCommands::ENABLE, msg_item->val);
+			myRobot_Obj->myRobot.comInt(ArCommands::VEL, msg_item->val);
 			break;
 		default:
 			ArLog::log(ArLog::Terse, "Slave bad msg: idx=%d, type=%d, key=%d, val=%d",
@@ -1774,8 +1785,17 @@ bool check_encrypt_info(struct Msg_Item *msg_item)
 {
 	ArLog::log(ArLog::Terse, 
 		"Check Packet: idx=%d ----", msg_item->index); 
-
-	return true;
+	bool res = true;
+	/************************************************************************/
+	/* 接受数据认证，确定数据包是否合法                                                      */
+	/************************************************************************/
+#if CARAUTH
+	if (car_auth.checkMsg(*msg_item) == 1)
+		res = true;
+	else
+		res = false;
+#endif
+	return res;
 }
 
 

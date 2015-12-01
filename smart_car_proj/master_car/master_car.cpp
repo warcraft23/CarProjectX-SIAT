@@ -1,9 +1,14 @@
 //#include "Windows.h"
+#pragma comment(lib,"CarAuthDll.lib")
 #include <math.h>
 #include <string>
 #include "Aria.h"
+#include "car_auth.h"
 
 #define OUTDOOR 1
+/************************************************************************/
+/* UNTEST_NET 1为室外有GPS，0为室内无GPS                                     */
+/************************************************************************/
 #define UNTEST_NET 1
 #define ENABLE_ECOM 0
 
@@ -15,6 +20,7 @@
 #define SPORT 9999
 
 int masterGpsTest = 0;
+CarAuth car_auth = CarAuth(1);
 
 class Robot_Obj {
 public:
@@ -89,7 +95,7 @@ Robot_Obj::~Robot_Obj()
 		delete mySonar;
 	}
 }
-
+/*
 enum { TYPE_GENERIC = 1, TYPE_SPECIAL = 2, TYPE_DIRECTION = 4,
 	TYPE_ECOMPASS = 8};
 
@@ -120,7 +126,7 @@ struct Msg_Item {
 };
 
 #define MSG_LEN (sizeof(struct Msg_Item))
-
+*/
 class Robot_Msg {
 public:
 	struct Msg_Item myMsgQueue[MSG_QUEUE_LEN];
@@ -1157,6 +1163,12 @@ void SendSlaveMsgThread::parseAndForwardMsg(struct Msg_Item *msg_item)
 	}
 #endif
 
+	/************************************************************************/
+	/* 对数据包进行打包，填充其中的签名和公玥，时间戳和crc等                 */
+	/************************************************************************/
+#if CARAUTH
+	car_auth.packPkt(msg_item);
+#endif
 	for (i = 0; i < mySlaveNr; i++) {
 		if(mySlaveSock[i].write((void *)msg_item, MSG_LEN) == MSG_LEN)
 			ArLog::log(ArLog::Verbose, 
@@ -1534,7 +1546,8 @@ void RcvControlMsgThread::parseMsg(struct Msg_Item *msg_item)
 			break;
 		#endif
 		case 'p':
-			myRobot_Obj->myRobot.comInt(ArCommands::ENABLE, msg_item->val);
+			//myRobot_Obj->myRobot.comInt(ArCommands::ENABLE, msg_item->val);
+			myRobot_Obj->myRobot.comInt(ArCommands::VEL, msg_item->val);
 			msgEnqueueSlavequeue(msg_item);
 			ArLog::log(ArLog::Normal, "Master parseMsg: idx=%d, type=%d, key=%d, val=%d",
 					msg_item->index, msg_item->type, msg_item->key, msg_item->val); 
@@ -1696,8 +1709,22 @@ bool check_encrypt_info(struct Msg_Item *msg_item)
 {
 	ArLog::log(ArLog::Terse, 
 		"Check Packet: idx=%d ----", msg_item->index); 
-
-	return true;
+	bool res = true;
+	/************************************************************************/
+	/* 对数据包进行验证确定其是否合法                                                        */
+	/************************************************************************/
+#if CARAUTH
+	if (car_auth.checkMsg(*msg_item)==1)
+	{
+		res = true;
+	} 
+	else
+	{
+		res = false;
+	}
+	
+#endif
+	return res;
 }
 
 int main(int argc, char **argv)
